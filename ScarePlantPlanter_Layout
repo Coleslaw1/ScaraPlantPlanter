@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-05-13T14:27:04.422Z" agent="5.0 (Windows)" etag="oAqd_2xMYKadJbt-liQ-" version="13.1.1" type="github">
+<mxfile host="app.diagrams.net" modified="2020-05-13T14:31:31.500Z" agent="5.0 (Windows)" etag="sQygHMFWzm3LyQGFJxy0" version="13.1.1" type="github">
   <diagram id="6E9v-IUWLN7j-Zu4WQeW" name="Page-1">
     <mxGraphModel dx="2272" dy="791" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -25,7 +25,7 @@
         <mxCell id="8x-TqHLyPUYKxbkaesLY-3" value="Output tray 1" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="395" y="300" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="8x-TqHLyPUYKxbkaesLY-4" value="Seed shaker" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="8x-TqHLyPUYKxbkaesLY-4" value="Input tray" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="395" y="100" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="8x-TqHLyPUYKxbkaesLY-5" value="Control system" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -37,7 +37,7 @@
         <mxCell id="8x-TqHLyPUYKxbkaesLY-8" value="Output tray 3" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="660" y="300" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="8x-TqHLyPUYKxbkaesLY-9" value="&lt;div&gt;Vision setup&lt;/div&gt;&lt;div&gt;for seed shaker&lt;br&gt;&lt;/div&gt;&amp;nbsp;(If needed)" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="8x-TqHLyPUYKxbkaesLY-9" value="&lt;div&gt;Vision setup&lt;/div&gt;&lt;div&gt;for input tray&lt;br&gt;&lt;/div&gt;&amp;nbsp;(If needed)" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="530" y="100" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="8x-TqHLyPUYKxbkaesLY-10" value="(Not in scope) linear guidance " style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
