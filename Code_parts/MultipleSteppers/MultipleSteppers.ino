@@ -1,6 +1,7 @@
 /* 
 AccelStepper library: http://www.airspayce.com/mikem/arduino/AccelStepper/classAccelStepper.html#a73bdecf1273d98d8c5fbcb764cabeea5
-
+TB6600 Stepper controller: https://www.makerguides.com/tb6600-stepper-motor-driver-arduino-tutorial/
+ 
  To do:
  - Test main functioning of Accelstepper code 
  - Make a conversion between angles and steps (1 degree = 53 steps)
