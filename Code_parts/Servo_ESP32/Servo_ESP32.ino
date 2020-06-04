@@ -1,6 +1,6 @@
 #include <ESP32_Servo.h>
 
-#define DELAY 300
+#define DELAY 2000
 
 #define SERVO_PIN 4
 //18
@@ -12,8 +12,8 @@ void setup() {
 }
 
 void loop() {
-  myservo.write(0);
+  myservo.write(90);
   delay(DELAY);
-  myservo.write(180);
+  myservo.write(270);
   delay(DELAY);
 }
