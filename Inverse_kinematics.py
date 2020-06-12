@@ -8,24 +8,25 @@ This is a temporary script file.
 from math import sin, cos, acos, atan, degrees, pow
 import matplotlib.pyplot as plt
 
-la1 = 215
-la2 = 165
+la1 = 215 #Millimeters
+la2 = 165 #Millimeters
 
-arm_2_angle_limit = 150
+arm_2_angle_limit = 150 #Degrees
 
-x = 100     
-y = 200
 q2_old = 0
 q1_old = 0
 
 q1_array=[]
 q2_array=[]
-x_pos_array=[]
-y_pos_array=[]
+
+q1_difference_array = []
+q2_difference_array = []
+
+x1_pos_array=[]
+y1_pos_array=[]
 
 ##To do:
 # - Toevoegen limieten op de basis van de Z-as
-
 
 def rounded_degrees(q2,q1):
     q2_deg_r = round(degrees(q2))
@@ -46,19 +47,32 @@ def inv_kinematics(x,y, q2_deg_old, q1_deg_old):
             print("No possible angle combination found")
     else:
         pass
+    
     q2_array.append(q2)
     q1_array.append(q1)
     
-    print("q2: ",q2," q1: ",q1)
-    print("Difference q2: ",(q2-q2_deg_old),"difference q1: ",(q1-q1_deg_old), "\n")
+    q2_difference_array.append(q2-q2_deg_old)
+    q1_difference_array.append(q1-q1_deg_old)
+    
+#    print("q2: ",q2," q1: ",q1)
+#    print("Difference q2: ",(q2-q2_deg_old),"difference q1: ",(q1-q1_deg_old), "\n")
     return q2, q1
 
-for i in range (-200, 200, 11): #Range in de X-richting
-    q2_old, q1_old = inv_kinematics(i,150, q2_old, q1_old)
-    x_pos_array.append(i)
-    y_pos_array.append(200)
+def C_array_print(q1_array, q2_array, q1_difference_array, q2_difference_array):
+#    print("int pickUp_locations_q1[12] = {",q1_array,"}")
+#    print("int pickUp_locations_q2[12] = {",q2_array,"}")
+    print("int pickUp_difference_q1[12]= {",q1_difference_array,"}")
+    print("int pickUp_difference_q2[12]= {",q2_difference_array,"}")
+
+for i in range (-250, 200, 21): #Range in de X-richting
+    y_distance = 50
+    q2_old, q1_old = inv_kinematics(i,y_distance, q2_old, q1_old) #min applicable distance 50 mm 
+    x1_pos_array.append(i)
+    y1_pos_array.append(y_distance)
+
+C_array_print(q1_array, q2_array, q1_difference_array, q2_difference_array)
     
-plt.plot(x_pos_array, y_pos_array)
+plt.plot(x1_pos_array, y1_pos_array, "blue")
 plt.xlabel("x-position (mm) -->")
 plt.ylabel("y-position (mm) -->")
 plt.grid()
