@@ -87,14 +87,14 @@ void limitSwitches() {
   val_ms_q2 = digitalRead(microSwitch_q2);
 
   if (DEBUG) {
-    if (val_ms_z == 1) Serial.println("MU Z: \t1");
-    else if (val_ms_z == 0) Serial.println("MU Z: \t0");
+    if (val_ms_z) Serial.println("MU Z: \t1");
+    else if (!val_ms_z) Serial.println("MU Z: \t0");
 
-    if (val_ms_q1 == 1) Serial.println("MU q1: \t1");
-    else if (val_ms_q1 == 0)Serial.println("MU q1: \t0");
+    if (val_ms_q1) Serial.println("MU q1: \t1");
+    else if (!val_ms_q1)Serial.println("MU q1: \t0");
 
-    if (val_ms_q2 == 1) Serial.println("MU q2: \t1");
-    else if (val_ms_q2 == 0)Serial.println("MU q2: \t0\n");
+    if (val_ms_q2) Serial.println("MU q2: \t1");
+    else if (!val_ms_q2)Serial.println("MU q2: \t0\n");
   }
 }
 
