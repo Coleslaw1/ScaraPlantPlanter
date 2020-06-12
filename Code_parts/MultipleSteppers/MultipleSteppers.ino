@@ -52,19 +52,18 @@ void setup()
 {
   Serial.begin(115200);
   //To do: Find out if moveTo works in amount of steps or amount of revolutions (probably steps)
-  stepper_a1.setMaxSpeed(100.0);
-  stepper_a1.setAcceleration(50.0);
+  stepper_a1.setMaxSpeed(1000.0);
+  stepper_a1.setAcceleration(1000.0);
 
-  stepper_a2.setMaxSpeed(100.0);
-  stepper_a2.setAcceleration(50.0);
+  stepper_a2.setMaxSpeed(1000.0);
+  stepper_a2.setAcceleration(1000.0);
 
-  stepper_z.setMaxSpeed(100.0);
-  stepper_z.setAcceleration(50.0);
+  stepper_z.setMaxSpeed(100000);
+  stepper_z.setAcceleration(100000.0);
 
-  pinMode(microSwitch_z, INPUT);
-  pinMode(microSwitch_q1, INPUT);
-  pinMode(microSwitch_q2, INPUT);
-  Serial.println(stepsPerDegree);
+  pinMode(microSwitch_z, INPUT_PULLUP);
+  pinMode(microSwitch_q1, INPUT_PULLUP);
+  pinMode(microSwitch_q2, INPUT_PULLUP);
 }
 
 void loop()
@@ -102,6 +101,10 @@ void limitSwitches() {
 void homing() { //Seems to be working, needs to be tested with hardware
   //Write code for homing each axis at a time
   Serial.println("Waiting for limit switches");
+  stepper_z.setSpeed(10000); //add - for opposite direction (don't forget to connect te 5V)
+  stepper_a1.setSpeed(10000);
+  stepper_a2.setSpeed(10000);
+
   while (!val_ms_z) {
     stepper_z.runSpeed();
     limitSwitches();
@@ -115,7 +118,7 @@ void homing() { //Seems to be working, needs to be tested with hardware
     limitSwitches();
   }
   stepper_a1.stop();
-  stepper_a1.setCurrentPosition(-90);
+  stepper_a1.setCurrentPosition(0);
   int a1_check = 1;
 
   while (!val_ms_q2) {
@@ -129,9 +132,11 @@ void homing() { //Seems to be working, needs to be tested with hardware
   if ((z_check) && (a1_check) && (a2_check)) case_var = 1;
 }
 
-void setArmsStraight(){
-  stepper_a1.moveTo(90);
-  stepper_a2.moveTo(90);
+void setArmsStraight() {
+  stepper_z.moveTo(90*stepsPerDegree/3); //Add - for opposite direction dont forget to connect 5V)
+  stepper_a1.moveTo(90 * stepsPerDegree/3);
+  stepper_a2.moveTo(90 * stepsPerDegree/3);
+  stepper_z.run();
   stepper_a1.run();
   stepper_a2.run();
   Serial.println("Running");
