@@ -42,7 +42,7 @@ of wires for the project and to make sure that all connections are made properly
 print the SMR-logo on the silkscreen and advertise the minor a bit.
 
 ![PCB design](/Webarticle_assets/pcb_out.png "PCB design")
-![PCB 3D design](/Webarticle_assets/pcb_a.png "PCB 3D design")
+![PCB 3D design](/Webarticle_assets/pcb_a.jpg "PCB 3D design")
 
 With this PCB the SCARA robot can be operated with the help of an ESP32 microcontroller unit. The ESP32 is being used 
 to drive control the three TB6600 stepper motor drivers, which in their time send the robot to the desired destination. 
