@@ -63,3 +63,9 @@ were found using inverse kinematics for a double pendulum. During the project, t
 of the SCARA robot and placed the cuttingstray and salable pots within this reach.
 
 IMAGES IMAGES IMAGES
+
+<h1>Conclusion</h1>
+
+From this project we can conclude that it definitly is possible to build a low cost custom SCARA robot. To realize the design some smart thinking is possible and it's very
+desirable to have acces to fast/accurate prototyping resources (e.g. waterjetting, resin printing). During the project the project team implemented the knowledge gained
+during four years of Mechatronics engineering at a level that was both fun and professional.
