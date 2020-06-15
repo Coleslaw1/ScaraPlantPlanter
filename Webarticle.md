@@ -41,7 +41,8 @@ For the product the team designed their own custom made PCB (Printed Circuit Boa
 of wires for the project and to make sure that all connections are made properly. As a nice feature the project group decided to
 print the SMR-logo on the silkscreen and advertise the minor a bit.
 
-IMAGES IMAGES IMAGES
+![PCB design](/Webarticle_assets/pcb_out.png "PCB design")
+![PCB 3D design](/Webarticle_assets/pcb_a.png "PCB 3D design")
 
 With this PCB the SCARA robot can be operated with the help of an ESP32 microcontroller unit. The ESP32 is being used 
 to drive control the three TB6600 stepper motor drivers, which in their time send the robot to the desired destination. 
@@ -54,6 +55,8 @@ The software of the SCARA robot is based on the AccelStepper library that's avai
 library is able to do (almost) anything you want with a stepper motor. For this project it was extremely useful when
 sending the robot from location to location and while doing that, making use of the acceleration and braking of the motor.
 
+![ESP32 software](/Webarticle_assets/Arduino_ide.png "ESP32 software")
+
 After booting the system the first thing the SCARA robot wants to do is home itself. Homing of the robot gets done by physically
 pressing three microswitches (one per arm and one for the z-axis) after each other. Once all three switches have been pressed the SCARA 
 robot gets in position for the pick-and-place cycle. 
@@ -62,8 +65,10 @@ The pick-up and drop-down locations have been hardcoded. The angles of the arm t
 were found using inverse kinematics for a double pendulum. During the project, the project team simulated the maximum reach
 of the SCARA robot and placed the cuttingstray and salable pots within this reach.
 
+![Inverse kinematics q2](/Webarticle_assets/INV_KIN_A1.png "Inverse kinematics q2")
+![Inverse kinematics q1](/Webarticle_assets/INV_KIN_A2.png "Inverse kinematics q1")
 ![Python Simulation](/Webarticle_assets/sim.png "Python Simulation")
-IMAGES IMAGES IMAGES
+
 
 <h1>Conclusion</h1>
 
