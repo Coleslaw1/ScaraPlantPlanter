@@ -65,8 +65,8 @@ The pick-up and drop-down locations have been hardcoded. The angles of the arm t
 were found using inverse kinematics for a double pendulum. During the project, the project team simulated the maximum reach
 of the SCARA robot and placed the cuttingstray and salable pots within this reach.
 
-![Inverse kinematics q2](/Webarticle_assets/INV_KIN_A1.png "Inverse kinematics q2")
-![Inverse kinematics q1](/Webarticle_assets/INV_KIN_A2.png "Inverse kinematics q1")
+![Inverse kinematics q2](/Webarticle_assets/INV_KIN_A2.png "Inverse kinematics q2")
+![Inverse kinematics q1](/Webarticle_assets/INV_KIN_A1.png "Inverse kinematics q1")
 ![Python Simulation](/Webarticle_assets/sim.png "Python Simulation")
 
 
