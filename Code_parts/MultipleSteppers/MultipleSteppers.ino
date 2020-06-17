@@ -19,11 +19,11 @@
 #define stepPin_a1 26
 #define dirPin_a1 27
 
-#define stepPin_a2 32
-#define dirPin_a2 33
+#define stepPin_a2 21
+#define dirPin_a2 12
 
-#define stepPin_z 21
-#define dirPin_z 12
+#define stepPin_z 32
+#define dirPin_z 33
 
 #define microSwitch_z 15
 #define microSwitch_q1 2
