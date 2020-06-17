@@ -25,9 +25,9 @@
 #define stepPin_z 21
 #define dirPin_z 12
 
-#define microSwitch_z 22
+#define microSwitch_z 15
 #define microSwitch_q1 2
-#define microSwitch_q2 15
+#define microSwitch_q2 22
 
 
 const int uStepSize_arms = 32;
