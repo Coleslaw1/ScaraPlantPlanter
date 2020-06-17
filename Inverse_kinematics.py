@@ -28,6 +28,8 @@ y1_pos_array=[]
 ##To do:
 # - Toevoegen limieten op de basis van de Z-as
 
+DEBUG = 0
+
 def rounded_degrees(q2,q1):
     q2_deg_r = round(degrees(q2))
     q1_deg_r = round(degrees(q1))
@@ -54,13 +56,15 @@ def inv_kinematics(x,y, q2_deg_old, q1_deg_old):
     q2_difference_array.append(q2-q2_deg_old)
     q1_difference_array.append(q1-q1_deg_old)
     
-#    print("q2: ",q2," q1: ",q1)
-#    print("Difference q2: ",(q2-q2_deg_old),"difference q1: ",(q1-q1_deg_old), "\n")
+    if(DEBUG):
+        print("q2: ",q2," q1: ",q1)
+        print("Difference q2: ",(q2-q2_deg_old),"difference q1: ",(q1-q1_deg_old), "\n")
     return q2, q1
 
 def C_array_print(q1_array, q2_array, q1_difference_array, q2_difference_array):
-#    print("int pickUp_locations_q1[12] = {",q1_array,"}")
-#    print("int pickUp_locations_q2[12] = {",q2_array,"}")
+    if(DEBUG):
+        print("int pickUp_locations_q1[12] = {",q1_array,"}")
+        print("int pickUp_locations_q2[12] = {",q2_array,"}")
     print("int pickUp_difference_q1[12]= {",q1_difference_array,"}")
     print("int pickUp_difference_q2[12]= {",q2_difference_array,"}")
 
@@ -71,12 +75,13 @@ for i in range (-250, 200, 21): #Range in de X-richting
     y1_pos_array.append(y_distance)
 
 C_array_print(q1_array, q2_array, q1_difference_array, q2_difference_array)
-    
-plt.plot(x1_pos_array, y1_pos_array, "blue")
-plt.xlabel("x-position (mm) -->")
-plt.ylabel("y-position (mm) -->")
-plt.grid()
-plt.show()    
+
+if(DEBUG):
+    plt.plot(x1_pos_array, y1_pos_array, "blue")
+    plt.xlabel("x-position (mm) -->")
+    plt.ylabel("y-position (mm) -->")
+    plt.grid()
+    plt.show()    
 
   
 
