@@ -34,8 +34,9 @@ const int uStepSize_arms = 32;
 const int uStepSize_z = 32;
 const int stepsRevolution = 200;
 const int transMission_arms = 3;
-const int stepsPerDegree = 53; //make a calculation for this, instead of hardcoding it
+const double stepsPerDegree = (uStepSize_arms*stepsRevolution*transMission_arms)/360; //make a calculation for this, instead of hardcoding it
 const int stepsPerMillimeter = 800;
+
 
 int val_ms_z;
 int val_ms_q1;
@@ -64,6 +65,9 @@ void setup()
   pinMode(microSwitch_z, INPUT_PULLUP);
   pinMode(microSwitch_q1, INPUT_PULLUP);
   pinMode(microSwitch_q2, INPUT_PULLUP);
+
+  if(DEBUG)Serial.println(stepsPerDegree);
+
 }
 
 void loop()
@@ -76,7 +80,7 @@ void loop()
       setArmsStraight();
       break;
     case 2:
-      Serial.println("It's time for some action now");
+      mainRoutine();
       break;
   }
 }
@@ -99,6 +103,7 @@ void limitSwitches() {
 }
 
 void homing() { //Seems to be working, needs to be tested with hardware
+  if(DEBUG) Serial.println("DEBUG: Homing");
   //Write code for homing each axis at a time
   Serial.println("Waiting for limit switches");
   stepper_z.setSpeed(10000); //add - for opposite direction (don't forget to connect te 5V)
@@ -110,7 +115,7 @@ void homing() { //Seems to be working, needs to be tested with hardware
     limitSwitches();
   }
   stepper_z.stop();
-  stepper_z.setCurrentPosition(0);
+  stepper_z.setCurrentPosition(0); //Bovenlimiet opgeven (alles wat naar beneden beweegt is dus -, of bovenlimiet hoog opgeven)
   int z_check = 1;
 
   while (!val_ms_q1) {
@@ -118,7 +123,7 @@ void homing() { //Seems to be working, needs to be tested with hardware
     limitSwitches();
   }
   stepper_a1.stop();
-  stepper_a1.setCurrentPosition(0);
+  stepper_a1.setCurrentPosition(0); //Hoek waarin de arm staat bij het indrukken van microswitch invoeren
   int a1_check = 1;
 
   while (!val_ms_q2) {
@@ -126,18 +131,26 @@ void homing() { //Seems to be working, needs to be tested with hardware
     limitSwitches();
   }
   stepper_a2.stop();
-  stepper_a2.setCurrentPosition(0);
+  stepper_a2.setCurrentPosition(0); //Hoek waarin de arm staat bij het indrukken van de microswitch invoeren
   int a2_check = 1;
 
   if ((z_check) && (a1_check) && (a2_check)) case_var = 1;
 }
 
 void setArmsStraight() {
-  stepper_z.moveTo(90*stepsPerDegree/3); //Add - for opposite direction dont forget to connect 5V)
+  if(DEBUG) Serial.println("DEBUG: Setting arms straight");
+//  stepper_z.moveTo(90 * stepsPerDegree/3); //Add - for opposite direction dont forget to connect 5V)
   stepper_a1.moveTo(90 * stepsPerDegree/3);
   stepper_a2.moveTo(90 * stepsPerDegree/3);
-  stepper_z.run();
+//  stepper_z.run();
   stepper_a1.run();
   stepper_a2.run();
-  Serial.println("Running");
+}
+
+void mainRoutine() {
+  if(DEBUG) Serial.println("DEBUG: Main routine");
+
+  while(1){
+    Serial.println("Running main code");
+  }
 }
