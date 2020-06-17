@@ -14,7 +14,7 @@
 
 #include <AccelStepper.h>
 
-#define DEBUG 0
+#define DEBUG 1
 
 #define stepPin_a1 26
 #define dirPin_a1 27
@@ -59,8 +59,8 @@ void setup()
   stepper_a2.setMaxSpeed(1000.0);
   stepper_a2.setAcceleration(1000.0);
 
-  stepper_z.setMaxSpeed(100000);
-  stepper_z.setAcceleration(100000.0);
+  stepper_z.setMaxSpeed(1000);
+  stepper_z.setAcceleration(1000.0);
 
   pinMode(microSwitch_z, INPUT_PULLUP);
   pinMode(microSwitch_q1, INPUT_PULLUP);
