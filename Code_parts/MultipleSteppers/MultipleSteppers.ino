@@ -34,7 +34,7 @@ const int uStepSize_arms = 32;
 const int uStepSize_z = 32;
 const int stepsRevolution = 200;
 const int transMission_arms = 3;
-const double stepsPerDegree = (uStepSize_arms*stepsRevolution*transMission_arms)/360; //make a calculation for this, instead of hardcoding it
+const double stepsPerDegree = (uStepSize_arms*stepsRevolution*transMission_arms) / 360; //make a calculation for this, instead of hardcoding it
 const int stepsPerMillimeter = 800;
 
 
@@ -59,15 +59,12 @@ void setup()
   stepper_a2.setMaxSpeed(1000.0);
   stepper_a2.setAcceleration(1000.0);
 
-  stepper_z.setMaxSpeed(1000);
+  stepper_z.setMaxSpeed(1000.0);
   stepper_z.setAcceleration(1000.0);
 
   pinMode(microSwitch_z, INPUT_PULLUP);
   pinMode(microSwitch_q1, INPUT_PULLUP);
   pinMode(microSwitch_q2, INPUT_PULLUP);
-
-  if(DEBUG)Serial.println(stepsPerDegree);
-
 }
 
 void loop()
@@ -91,21 +88,20 @@ void limitSwitches() {
   val_ms_q2 = digitalRead(microSwitch_q2);
 
   if (DEBUG) {
-    if (val_ms_z) Serial.println("MU Z: \t1");
-    else if (!val_ms_z) Serial.println("MU Z: \t0");
+    if (val_ms_z) Serial.println("DEBUG: MU Z: \t1");
+    else if (!val_ms_z) Serial.println("DEBUG: MU Z: \t0");
 
-    if (val_ms_q1) Serial.println("MU q1: \t1");
-    else if (!val_ms_q1)Serial.println("MU q1: \t0");
+    if (val_ms_q1) Serial.println("DEBUG: MU q1: \t1");
+    else if (!val_ms_q1)Serial.println("DEBUG: MU q1: \t0");
 
-    if (val_ms_q2) Serial.println("MU q2: \t1");
-    else if (!val_ms_q2)Serial.println("MU q2: \t0\n");
+    if (val_ms_q2) Serial.println("DEBUG: MU q2: \t1");
+    else if (!val_ms_q2)Serial.println("DEBUG: MU q2: \t0\n");
   }
 }
 
 void homing() { //Seems to be working, needs to be tested with hardware
-  if(DEBUG) Serial.println("DEBUG: Homing");
+  if (DEBUG) Serial.println("DEBUG: Homing");
   //Write code for homing each axis at a time
-  Serial.println("Waiting for limit switches");
   stepper_z.setSpeed(10000); //add - for opposite direction (don't forget to connect te 5V)
   stepper_a1.setSpeed(10000);
   stepper_a2.setSpeed(10000);
@@ -117,6 +113,7 @@ void homing() { //Seems to be working, needs to be tested with hardware
   stepper_z.stop();
   stepper_z.setCurrentPosition(0); //Bovenlimiet opgeven (alles wat naar beneden beweegt is dus -, of bovenlimiet hoog opgeven)
   int z_check = 1;
+  if (DEBUG) Serial.println("DEBUG: Z-axis switch pressed");
 
   while (!val_ms_q1) {
     stepper_a1.runSpeed();
@@ -125,6 +122,8 @@ void homing() { //Seems to be working, needs to be tested with hardware
   stepper_a1.stop();
   stepper_a1.setCurrentPosition(0); //Hoek waarin de arm staat bij het indrukken van microswitch invoeren
   int a1_check = 1;
+  if (DEBUG) Serial.println("DEBUG: Arm 1 switch pressed");
+
 
   while (!val_ms_q2) {
     stepper_a2.runSpeed();
@@ -133,24 +132,25 @@ void homing() { //Seems to be working, needs to be tested with hardware
   stepper_a2.stop();
   stepper_a2.setCurrentPosition(0); //Hoek waarin de arm staat bij het indrukken van de microswitch invoeren
   int a2_check = 1;
+  if (DEBUG) Serial.println("DEBUG: Arm 2 switc pressed");
 
   if ((z_check) && (a1_check) && (a2_check)) case_var = 1;
 }
 
 void setArmsStraight() {
-  if(DEBUG) Serial.println("DEBUG: Setting arms straight");
-//  stepper_z.moveTo(90 * stepsPerDegree/3); //Add - for opposite direction dont forget to connect 5V)
-  stepper_a1.moveTo(90 * stepsPerDegree/3);
-  stepper_a2.moveTo(90 * stepsPerDegree/3);
-//  stepper_z.run();
+  if (DEBUG) Serial.println("DEBUG: Setting arms straight");
+  stepper_a1.moveTo(90 * stepsPerDegree / 3); //Add - for opposite direction dont forget to connect 5V)
+  stepper_a2.moveTo(90 * stepsPerDegree / 3);
+
   stepper_a1.run();
   stepper_a2.run();
+
 }
 
 void mainRoutine() {
-  if(DEBUG) Serial.println("DEBUG: Main routine");
+  if (DEBUG) Serial.println("DEBUG: Main routine");
 
-  while(1){
+  while (1) {
     Serial.println("Running main code");
   }
 }
