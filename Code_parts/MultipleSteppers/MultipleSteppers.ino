@@ -14,16 +14,19 @@
 
 #include <AccelStepper.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
-#define stepPin_a1 26
-#define dirPin_a1 27
+#define stepPin_a1 21
+#define dirPin_a1 13
+#define enaPin_a1 12
 
-#define stepPin_a2 21
-#define dirPin_a2 12
+#define stepPin_a2 26
+#define dirPin_a2 14
+#define enaPin_a2 27
 
 #define stepPin_z 32
-#define dirPin_z 33
+#define dirPin_z 25
+#define enaPin_z 33
 
 #define microSwitch_z 15
 #define microSwitch_q1 2
@@ -44,27 +47,37 @@ int val_ms_q2;
 
 int case_var = 0;
 
+#define motorInterfaceType 1
+
 // Define some steppers and the pins the will use
-AccelStepper stepper_a1(AccelStepper::DRIVER, stepPin_a1, dirPin_a1);
-AccelStepper stepper_a2(AccelStepper::DRIVER, stepPin_a2, dirPin_a2);
-AccelStepper stepper_z(AccelStepper::DRIVER, stepPin_z, dirPin_z);
+AccelStepper stepper_a1(motorInterfaceType, stepPin_a1, dirPin_a1);
+AccelStepper stepper_a2(motorInterfaceType, stepPin_a2, dirPin_a2);
+AccelStepper stepper_z(motorInterfaceType, stepPin_z, dirPin_z);
 
 void setup()
 {
   Serial.begin(115200);
   //To do: Find out if moveTo works in amount of steps or amount of revolutions (probably steps)
-  stepper_a1.setMaxSpeed(1000.0);
-  stepper_a1.setAcceleration(1000.0);
+  stepper_a1.setMaxSpeed(10000);
+  stepper_a1.setAcceleration(5000);
 
-  stepper_a2.setMaxSpeed(1000.0);
-  stepper_a2.setAcceleration(1000.0);
+  stepper_a2.setMaxSpeed(10000);
+  stepper_a2.setAcceleration(5000);
 
-  stepper_z.setMaxSpeed(1000.0);
-  stepper_z.setAcceleration(1000.0);
+  stepper_z.setMaxSpeed(10000);
+  stepper_z.setAcceleration(5000);
 
-  pinMode(microSwitch_z, INPUT_PULLUP);
+  pinMode(microSwitch_z,  INPUT_PULLUP);
   pinMode(microSwitch_q1, INPUT_PULLUP);
   pinMode(microSwitch_q2, INPUT_PULLUP);
+
+  pinMode(enaPin_a1, OUTPUT);
+  pinMode(enaPin_a2, OUTPUT);
+  pinMode(enaPin_z,  OUTPUT);
+
+  digitalWrite(enaPin_a1, HIGH);
+  digitalWrite(enaPin_a2, HIGH);
+  digitalWrite(enaPin_z,  HIGH);
 }
 
 void loop()
@@ -107,7 +120,10 @@ void homing() { //Seems to be working, needs to be tested with hardware
   stepper_a2.setSpeed(10000);
 
   while (!val_ms_z) {
+//    stepper_z.setSpeed(10000);
     stepper_z.runSpeed();
+//    stepper_z.moveTo(64000);
+//    stepper_z.runToPosition();
     limitSwitches();
   }
   stepper_z.stop();
@@ -149,6 +165,10 @@ void setArmsStraight() {
 
 void mainRoutine() {
   if (DEBUG) Serial.println("DEBUG: Main routine");
+
+  digitalWrite(enaPin_a1, LOW);
+  digitalWrite(enaPin_a2, LOW);
+  digitalWrite(enaPin_z,  LOW);
 
   while (1) {
     Serial.println("Running main code");
