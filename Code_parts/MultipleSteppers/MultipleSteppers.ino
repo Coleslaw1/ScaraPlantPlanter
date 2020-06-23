@@ -40,6 +40,9 @@ const int transMission_arms = 3;
 const double stepsPerDegree = (uStepSize_arms*stepsRevolution*transMission_arms) / 360; //make a calculation for this, instead of hardcoding it
 const int stepsPerMillimeter = 800;
 
+const int motorSpeedHomingZ = 10000;
+const int motorSpeedHomingArms = 10000;
+
 
 int val_ms_z;
 int val_ms_q1;
@@ -58,14 +61,14 @@ void setup()
 {
   Serial.begin(115200);
   //To do: Find out if moveTo works in amount of steps or amount of revolutions (probably steps)
-  stepper_a1.setMaxSpeed(10000);
-  stepper_a1.setAcceleration(5000);
+  stepper_a1.setMaxSpeed(1000);
+  stepper_a1.setAcceleration(500);
 
-  stepper_a2.setMaxSpeed(10000);
-  stepper_a2.setAcceleration(5000);
+  stepper_a2.setMaxSpeed(1000);
+  stepper_a2.setAcceleration(500);
 
-  stepper_z.setMaxSpeed(10000);
-  stepper_z.setAcceleration(5000);
+  stepper_z.setMaxSpeed(1000);
+  stepper_z.setAcceleration(500);
 
   pinMode(microSwitch_z,  INPUT_PULLUP);
   pinMode(microSwitch_q1, INPUT_PULLUP);
@@ -115,9 +118,9 @@ void limitSwitches() {
 void homing() { //Seems to be working, needs to be tested with hardware
   if (DEBUG) Serial.println("DEBUG: Homing");
   //Write code for homing each axis at a time
-  stepper_z.setSpeed(10000); //add - for opposite direction (don't forget to connect te 5V)
-  stepper_a1.setSpeed(10000);
-  stepper_a2.setSpeed(10000);
+  stepper_z.setSpeed(-motorSpeedHomingZ); //add - for opposite direction (don't forget to connect te 5V)
+  stepper_a1.setSpeed(motorSpeedHomingArms);
+  stepper_a2.setSpeed(motorSpeedHomingArms);
 
   while (!val_ms_z) {
 //    stepper_z.setSpeed(10000);
