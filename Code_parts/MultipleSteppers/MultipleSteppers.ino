@@ -232,7 +232,7 @@ void homing() { //Seems to be working, needs to be tested with hardware
     limitSwitches();
   }
   stepper_a2.stop();
-  stepper_a2.setCurrentPosition(-180); //Hoek waarin de arm staat bij het indrukken van de microswitch invoeren
+  stepper_a2.setCurrentPosition(-180); // Angle with which the arm whilest pressing the microswitch
   int a2_check = 1;
   if (DEBUG) Serial.println("DEBUG: Arm 2 switc pressed");
 
