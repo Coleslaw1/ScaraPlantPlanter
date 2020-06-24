@@ -1,4 +1,3 @@
-
 /*
   AccelStepper library: http://www.airspayce.com/mikem/arduino/AccelStepper/classAccelStepper.html#a73bdecf1273d98d8c5fbcb764cabeea5
   TB6600 Stepper controller: https://www.makerguides.com/tb6600-stepper-motor-driver-arduino-tutorial/
@@ -13,6 +12,7 @@
 */
 
 #include <AccelStepper.h>
+#include <ESP32_Servo.h>
 
 #define DEBUG 0
 
@@ -32,12 +32,14 @@
 #define microSwitch_q1 22
 #define microSwitch_q2 2
 
+#define leftServoPin  4
+#define rightServoPin 16
 
 const int uStepSize_arms = 32;
 const int uStepSize_z = 32;
 const int stepsRevolution = 200;
 const int transMission_arms = 3;
-const double stepsPerDegree = (uStepSize_arms*stepsRevolution*transMission_arms) / 360; //make a calculation for this, instead of hardcoding it
+const double stepsPerDegree = (uStepSize_arms*stepsRevolution*transMission_arms) / 360.0; //make a calculation for this, instead of hardcoding it
 const int stepsPerMillimeter = 800;
 
 const int motorSpeedHomingZ = 5000;
@@ -57,18 +59,26 @@ AccelStepper stepper_a1(motorInterfaceType, stepPin_a1, dirPin_a1);
 AccelStepper stepper_a2(motorInterfaceType, stepPin_a2, dirPin_a2);
 AccelStepper stepper_z(motorInterfaceType, stepPin_z, dirPin_z);
 
+// Define some servos
+Servo leftServo;
+Servo rightServo;
+
 void setup()
 {
   Serial.begin(115200);
+  Serial.println(stepsPerDegree);
   //To do: Find out if moveTo works in amount of steps or amount of revolutions (probably steps)
-  stepper_a1.setMaxSpeed(1000);
-  stepper_a1.setAcceleration(500);
+  stepper_a1.setMaxSpeed(3000);
+  stepper_a1.setAcceleration(1500);
 
-  stepper_a2.setMaxSpeed(1000);
-  stepper_a2.setAcceleration(500);
+  stepper_a2.setMaxSpeed(3000);
+  stepper_a2.setAcceleration(1500);
 
-  stepper_z.setMaxSpeed(5000);
-  stepper_z.setAcceleration(2500);
+  stepper_z.setMaxSpeed(10000);
+  stepper_z.setAcceleration(5000);
+
+  leftServo.attach(leftServoPin);
+  rightServo.attach(rightServoPin);
 
   pinMode(microSwitch_z,  INPUT_PULLUP);
   pinMode(microSwitch_q1, INPUT_PULLUP);
@@ -81,10 +91,12 @@ void setup()
   digitalWrite(enaPin_a1, HIGH);
   digitalWrite(enaPin_a2, HIGH);
   digitalWrite(enaPin_z,  HIGH);
+
+  openGripper();
+  
 }
 
-void loop()
-{
+void loop() {
   switch (case_var) {
     case 0: //Homing
       homing();
@@ -95,7 +107,73 @@ void loop()
     case 2:
       mainRoutine();
       break;
+    case 3:
+      goToPickupLocation();
+      break;
+    case 4:
+      closeGripper();
+      case_var = 5;
+      break;
+    case 5:
+      goToPlaceLocation();
+      break;
+    case 6:
+      openGripper();
+      stepper_z.moveTo(10 * stepsPerMillimeter);
+      case_var = 10;
+      break;
+    case 10:
+      stepper_z.run();
+    default:
+      break;
   }
+}
+
+void goToPlaceLocation() {
+  stepper_z.moveTo(10 * stepsPerMillimeter);
+  uint32_t timestamp = millis();
+  while(millis() - timestamp < 7000) {
+    stepper_z.run();
+  }
+  stepper_a1.moveTo(120 * stepsPerDegree);
+  stepper_a2.moveTo(210 * stepsPerDegree);
+  stepper_z.moveTo(60 * stepsPerMillimeter);
+  timestamp = millis();
+  while (millis() - timestamp < 10000) {
+    stepper_a1.run();
+    stepper_a2.run();
+  }
+  timestamp = millis();
+  while (millis() - timestamp < 7000) {
+    stepper_z.run();
+  }
+  case_var = 6;
+}
+
+void goToPickupLocation() {
+  stepper_a1.moveTo(60 * stepsPerDegree);
+  stepper_a2.moveTo(50 * stepsPerDegree);
+  stepper_z.moveTo(60 * stepsPerMillimeter);
+  uint32_t timestamp = millis();
+  while (millis() - timestamp < 5000) {
+    stepper_a1.run();
+    stepper_a2.run();
+  }
+  timestamp = millis();
+  while (millis() - timestamp < 7000) {
+    stepper_z.run();
+  }
+  case_var = 4;
+}
+
+void openGripper() {
+  leftServo.write(150);
+  rightServo.write(40);
+}
+
+void closeGripper() {
+  leftServo.write(180);
+  rightServo.write(10);
 }
 
 void limitSwitches() {
@@ -117,20 +195,20 @@ void limitSwitches() {
 
 void homing() { //Seems to be working, needs to be tested with hardware
   if (DEBUG) Serial.println("DEBUG: Homing");
+  
   //Write code for homing each axis at a time
   stepper_z.setSpeed(-motorSpeedHomingZ); //add - for opposite direction (don't forget to connect te 5V)
   stepper_a1.setSpeed(-motorSpeedHomingArms);
   stepper_a2.setSpeed(-motorSpeedHomingArms);
 
+  limitSwitches();
+
   while (!val_ms_z) {
-//    stepper_z.setSpeed(10000);
     stepper_z.runSpeed();
-//    stepper_z.moveTo(64000);
-//    stepper_z.runToPosition();
     limitSwitches();
   }
   stepper_z.stop();
-  stepper_z.setCurrentPosition(0); //Bovenlimiet opgeven (alles wat naar beneden beweegt is dus -, of bovenlimiet hoog opgeven)
+  stepper_z.setCurrentPosition(0); //Bovenlimiet opgeven (alles wat naar beneden beweegt is dus , of bovenlimiet hoog opgeven)
   int z_check = 1;
   if (DEBUG) Serial.println("DEBUG: Z-axis switch pressed");
 
@@ -144,14 +222,10 @@ void homing() { //Seems to be working, needs to be tested with hardware
   if (DEBUG) Serial.println("DEBUG: Arm 1 switch pressed");
 
   uint32_t timestamp = millis();
-//  while (stepper_a1.currentPosition() < (-45 * stepsPerDegree)) {
   while ((millis() - timestamp) < 3000) {
-    stepper_a1.moveTo(45 * stepsPerDegree);
+    stepper_a1.moveTo(47.5 * stepsPerDegree);
     stepper_a1.run();
   }
-  
-//  uint32_t timestamp = millis();
-//  while (millis() - timestamp < 3000);
 
   while (!val_ms_q2) {
     stepper_a2.runSpeed();
@@ -169,17 +243,19 @@ void setArmsStraight() {
   if (DEBUG) Serial.println("DEBUG: Setting arms straight");
   stepper_a1.moveTo(90 * stepsPerDegree); //Add - for opposite direction dont forget to connect 5V)
   stepper_a2.moveTo(180 * stepsPerDegree);
-  stepper_z.moveTo(60*stepsPerMillimeter);
+  stepper_z.moveTo(10 * stepsPerMillimeter);
 
   uint32_t timestamp = millis();
   while ((millis() - timestamp) < 2000) {
     stepper_a2.run();
   }
-  while (1) {
+  timestamp = millis();
+  while ((millis() - timestamp) < 7000) {
     stepper_z.run();
     stepper_a1.run();
     stepper_a2.run();
   }
+  case_var = 3;
 }
 
 void mainRoutine() {
