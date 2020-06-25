@@ -63,6 +63,8 @@ AccelStepper stepper_z(motorInterfaceType, stepPin_z, dirPin_z);
 Servo leftServo;
 Servo rightServo;
 
+uint32_t timestampA = 0;
+
 void setup()
 {
   Serial.begin(115200);
@@ -119,11 +121,30 @@ void loop() {
       break;
     case 6:
       openGripper();
-      stepper_z.moveTo(10 * stepsPerMillimeter);
+      stepper_z.moveTo(20 * stepsPerMillimeter);
+      stepper_a1.moveTo(0);
+      stepper_a2.moveTo(0);
+      timestampA = millis();
       case_var = 10;
       break;
     case 10:
-      stepper_z.run();
+      if (millis() - timestampA < 10000) {
+        stepper_z.run();
+      }
+      else {
+        case_var = 11;
+        timestampA = millis();
+      }
+      break;
+    case 11:
+      if (millis() - timestampA < 10000) {
+        stepper_a1.run();
+        stepper_a2.run();
+      }
+      else {
+        case_var = 0;
+      }
+      break;
     default:
       break;
   }
@@ -132,14 +153,14 @@ void loop() {
 void goToPlaceLocation() {
   stepper_z.moveTo(10 * stepsPerMillimeter);
   uint32_t timestamp = millis();
-  while(millis() - timestamp < 7000) {
+  while(millis() - timestamp < 10000) {
     stepper_z.run();
   }
-  stepper_a1.moveTo(120 * stepsPerDegree);
-  stepper_a2.moveTo(210 * stepsPerDegree);
-  stepper_z.moveTo(60 * stepsPerMillimeter);
+  stepper_a1.moveTo(50 * stepsPerDegree);
+  stepper_a2.moveTo(-20 * stepsPerDegree);
+  stepper_z.moveTo(80 * stepsPerMillimeter);
   timestamp = millis();
-  while (millis() - timestamp < 10000) {
+  while (millis() - timestamp < 8000) {
     stepper_a1.run();
     stepper_a2.run();
   }
@@ -151,29 +172,29 @@ void goToPlaceLocation() {
 }
 
 void goToPickupLocation() {
-  stepper_a1.moveTo(60 * stepsPerDegree);
-  stepper_a2.moveTo(50 * stepsPerDegree);
-  stepper_z.moveTo(60 * stepsPerMillimeter);
+  stepper_a1.moveTo(-50 * stepsPerDegree);
+  stepper_a2.moveTo(-70 * stepsPerDegree);
+  stepper_z.moveTo(80 * stepsPerMillimeter);
   uint32_t timestamp = millis();
   while (millis() - timestamp < 5000) {
     stepper_a1.run();
     stepper_a2.run();
   }
   timestamp = millis();
-  while (millis() - timestamp < 7000) {
+  while (millis() - timestamp < 10000) {
     stepper_z.run();
   }
   case_var = 4;
 }
 
 void openGripper() {
-  leftServo.write(150);
-  rightServo.write(40);
+  leftServo.write(120);
+  rightServo.write(70);
 }
 
 void closeGripper() {
-  leftServo.write(180);
-  rightServo.write(10);
+  leftServo.write(160);
+  rightServo.write(30);
 }
 
 void limitSwitches() {
@@ -212,27 +233,29 @@ void homing() { //Seems to be working, needs to be tested with hardware
   int z_check = 1;
   if (DEBUG) Serial.println("DEBUG: Z-axis switch pressed");
 
-  while (!val_ms_q1) {
-    stepper_a1.runSpeed();
-    limitSwitches();
-  }
-  stepper_a1.stop();
-  stepper_a1.setCurrentPosition(-95); //Hoek waarin de arm staat bij het indrukken van microswitch invoeren
+//  while (!val_ms_q1) {
+//    stepper_a1.runSpeed();
+//    limitSwitches();
+//  }
+//  stepper_a1.stop();
+//  stepper_a1.setCurrentPosition(-95); //Hoek waarin de arm staat bij het indrukken van microswitch invoeren
+  stepper_a1.setCurrentPosition(0);
   int a1_check = 1;
   if (DEBUG) Serial.println("DEBUG: Arm 1 switch pressed");
 
-  uint32_t timestamp = millis();
-  while ((millis() - timestamp) < 3000) {
-    stepper_a1.moveTo(47.5 * stepsPerDegree);
-    stepper_a1.run();
-  }
-
-  while (!val_ms_q2) {
-    stepper_a2.runSpeed();
-    limitSwitches();
-  }
-  stepper_a2.stop();
-  stepper_a2.setCurrentPosition(-180); // Angle with which the arm whilest pressing the microswitch
+//  uint32_t timestamp = millis();
+//  while ((millis() - timestamp) < 3000) {
+//    stepper_a1.moveTo(47.5 * stepsPerDegree);
+//    stepper_a1.run();
+//  }
+//
+//  while (!val_ms_q2) {
+//    stepper_a2.runSpeed();
+//    limitSwitches();
+//  }
+//  stepper_a2.stop();
+//  stepper_a2.setCurrentPosition(-180); // Angle with which the arm whilest pressing the microswitch
+  stepper_a2.setCurrentPosition(0);
   int a2_check = 1;
   if (DEBUG) Serial.println("DEBUG: Arm 2 switc pressed");
 
@@ -241,20 +264,20 @@ void homing() { //Seems to be working, needs to be tested with hardware
 
 void setArmsStraight() {
   if (DEBUG) Serial.println("DEBUG: Setting arms straight");
-  stepper_a1.moveTo(90 * stepsPerDegree); //Add - for opposite direction dont forget to connect 5V)
-  stepper_a2.moveTo(180 * stepsPerDegree);
-  stepper_z.moveTo(10 * stepsPerMillimeter);
-
-  uint32_t timestamp = millis();
-  while ((millis() - timestamp) < 2000) {
-    stepper_a2.run();
-  }
-  timestamp = millis();
-  while ((millis() - timestamp) < 7000) {
-    stepper_z.run();
-    stepper_a1.run();
-    stepper_a2.run();
-  }
+//  stepper_a1.moveTo(90 * stepsPerDegree); //Add - for opposite direction dont forget to connect 5V)
+//  stepper_a2.moveTo(180 * stepsPerDegree);
+//  stepper_z.moveTo(10 * stepsPerMillimeter);
+//
+//  uint32_t timestamp = millis();
+//  while ((millis() - timestamp) < 2000) {
+//    stepper_a2.run();
+//  }
+//  timestamp = millis();
+//  while ((millis() - timestamp) < 7000) {
+//    stepper_z.run();
+//    stepper_a1.run();
+//    stepper_a2.run();
+//  }
   case_var = 3;
 }
 
