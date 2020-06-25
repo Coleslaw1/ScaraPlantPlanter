@@ -8,16 +8,12 @@ Long brainstorm sessions and much research on YouTube later the team found a per
 *A SCARA (Selective Compliance Assembly Robot ARM) to pick and place cuttings from cuttingtrays to salable pots.*
 
 
-With this outcome in mind, the engineering began. These engineering has been broken up into three work packages. The
+With this outcome in mind, the engineering began. The engineering has been broken up into three work packages. The
 mechanical engineering, electrical engineering and last but not least, the software engineering. 
-
-For mechanical and electrical engineering, state of the art software packages have been used. For the software engineering
-the team decided to work with the Arduino IDE, this decision was made with the time left for the project in mind and 
-keeping the large amount of example projects in mind.
 
 <h2>Mechanical design</h2>
 
-The mechanical design is based on a two basic techniques.
+The mechanical design is based on a two basic production-methods:
 1. 3D-printing
 2. CNC laser cutting
 
